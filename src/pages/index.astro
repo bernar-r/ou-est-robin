@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import EnCeMoment from '../components/EnCeMoment.astro';
+import CarteVoyage from '../components/CarteVoyage.astro';
+import DerniereNouvelle from '../components/DerniereNouvelle.astro';
+import AjouterAccueil from '../components/AjouterAccueil.astro';
+import { lien } from '../lib/lien';
+---
+
+<Base
+  titre="Où est Robin ? — Voyage en Thaïlande et au Laos"
+  description="Page de suivi du voyage de Robin en Thaïlande et au Laos, en octobre 2026, pour sa famille et ses proches."
+  pageActive="accueil"
+>
+  <EnCeMoment />
+  <CarteVoyage />
+  <DerniereNouvelle />
+
+  <section class="mt-8 grid gap-3 sm:grid-cols-2">
+    <a href={lien('/voyage')} class="bouton bouton-secondaire w-full">Voir le voyage jour par jour</a>
+    <a href={lien('/rassurer')} class="bouton bouton-secondaire w-full">Bon à savoir, et qui appeler</a>
+  </section>
+
+  <AjouterAccueil />
+</Base>
+
+<script>
+  import '../scripts/maintenant';
+</script>

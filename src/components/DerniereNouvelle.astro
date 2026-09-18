@@ -1,0 +1,50 @@
+---
+import { STATUT } from '../data/statut';
+import { horodatageEnFrancais, joursDepuis, SEUIL_SILENCE_JOURS } from '../lib/voyage';
+import { lien } from '../lib/lien';
+
+const silence = joursDepuis(STATUT.derniereNouvelleISO);
+const silenceProlonge = silence >= SEUIL_SILENCE_JOURS;
+---
+
+<section aria-labelledby="titre-nouvelles" class="mt-6">
+  <h2 id="titre-nouvelles" class="text-xl font-bold mb-3">Dernière nouvelle de Robin</h2>
+
+  <div class="carte-blanche p-5 sm:p-6">
+    <blockquote class="text-lg leading-relaxed border-l-4 border-or pl-4">
+      {STATUT.messageDeRobin}
+    </blockquote>
+
+    <p class="mt-4 text-sm text-encre-douce">
+      Reçue le <span id="nouvelle-date">{horodatageEnFrancais(STATUT.derniereNouvelleISO)}</span>
+      (heure française).
+    </p>
+
+    {
+      STATUT.prochainContactPrevu && (
+        <p class="mt-2 text-sm text-encre-douce">
+          <span class="font-semibold text-encre">Prochaines nouvelles prévues :</span>{' '}
+          {STATUT.prochainContactPrevu}
+        </p>
+      )
+    }
+  </div>
+
+  <div
+    id="encart-silence"
+    hidden={!silenceProlonge}
+    class="carte-blanche mt-4 border-l-4 border-l-lagon bg-lagon-pale p-5"
+  >
+    <p class="font-bold">C’est normal de ne pas avoir de nouvelles pendant quelques jours.</p>
+    <p class="mt-2">
+      Dans les montagnes du Laos, pendant les journées de moto et surtout pendant les deux jours de
+      marche en forêt, il n’y a souvent aucun réseau téléphonique. Robin retrouve Internet dès qu’il
+      arrive dans une ville, en général le soir.
+    </p>
+    <p class="mt-3">
+      Cela fait <strong><span id="silence-nombre">{silence}</span> jours</strong> sans message. Ce délai était prévu :
+      consultez la page <a class="underline font-semibold" href={lien('/rassurer')}>Bon à savoir</a> pour
+      connaître la marche à suivre en cas d’inquiétude.
+    </p>
+  </div>
+</section>

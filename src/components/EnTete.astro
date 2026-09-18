@@ -1,0 +1,57 @@
+---
+import { lien } from '../lib/lien';
+
+interface Props {
+  pageActive: 'accueil' | 'voyage' | 'rassurer';
+}
+
+const { pageActive } = Astro.props;
+
+const liens = [
+  { cle: 'accueil', href: lien('/'), libelle: 'En ce moment' },
+  { cle: 'voyage', href: lien('/voyage'), libelle: 'Le voyage' },
+  { cle: 'rassurer', href: lien('/rassurer'), libelle: 'Bon à savoir' },
+] as const;
+---
+
+<header class="w-full border-b border-bordure bg-papier">
+  <div class="max-w-3xl mx-auto px-4 pt-5 pb-3">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-wide text-or">Thaïlande & Laos · octobre 2026</p>
+        <h1 class="text-2xl sm:text-3xl font-bold mt-1">Le voyage de Robin</h1>
+      </div>
+      <button
+        id="bouton-texte"
+        type="button"
+        aria-pressed="false"
+        class="shrink-0 min-h-12 min-w-12 px-3 rounded-full border border-bordure bg-papier text-encre-douce font-semibold"
+        title="Agrandir ou réduire la taille du texte"
+      >
+        <span aria-hidden="true">A</span><span class="text-xs align-top" aria-hidden="true">A</span>
+        <span class="sr-only">Agrandir le texte</span>
+      </button>
+    </div>
+
+    <nav aria-label="Navigation principale" class="mt-4">
+      <ul class="flex gap-2 overflow-x-auto">
+        {
+          liens.map((lien) => (
+            <li>
+              <a
+                href={lien.href}
+                aria-current={pageActive === lien.cle ? 'page' : undefined}
+                class:list={[
+                  'bouton whitespace-nowrap text-base',
+                  pageActive === lien.cle ? 'bouton-principal' : 'bouton-secondaire',
+                ]}
+              >
+                {lien.libelle}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

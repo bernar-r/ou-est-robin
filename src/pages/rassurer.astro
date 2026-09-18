@@ -1,0 +1,172 @@
+---
+import Base from '../layouts/Base.astro';
+import { lien } from '../lib/lien';
+
+const silencesPrevus = [
+  { periode: 'Du 10 au 13 octobre', lieu: 'Boucle à moto autour de Thakhek, au Laos' },
+  { periode: 'Du 18 au 21 octobre', lieu: 'Village de Nong Khiaw, dans les montagnes' },
+  { periode: 'Du 23 au 24 octobre', lieu: 'Deux jours de marche en forêt, sans aucun réseau' },
+];
+
+const urgences = [
+  { pays: 'Thaïlande', police: '191', ambulance: '1669', autre: 'Police touristique (anglophone) : 1155' },
+  { pays: 'Laos', police: '1191', ambulance: '1195', autre: null },
+];
+
+const ambassades = [
+  { libelle: 'Ambassade de France en Thaïlande (Bangkok)', numero: '+66 2 657 5100' },
+  { libelle: 'Ambassade de France au Laos (Vientiane)', numero: '+856 21 267 400' },
+];
+---
+
+<Base
+  titre="Bon à savoir — Voyage de Robin"
+  description="Assurance, santé, façons de joindre Robin et marche à suivre en cas d’inquiétude."
+  pageActive="rassurer"
+>
+  <section class="mt-6">
+    <h2 class="text-2xl sm:text-3xl font-bold">Bon à savoir</h2>
+    <p class="mt-3 text-lg">
+      Cette page répond aux questions que l’on se pose quand quelqu’un part loin, tout seul.
+    </p>
+  </section>
+
+  <section aria-labelledby="titre-prepare" class="mt-7">
+    <h3 id="titre-prepare" class="text-xl font-bold">Ce qui a été préparé avant le départ</h3>
+    <ul class="mt-3 space-y-3">
+      <li class="carte-blanche p-4">
+        <p class="font-bold">Une assurance voyage complète</p>
+        <p class="mt-1 text-encre-douce">
+          Frais médicaux et rapatriement couverts, y compris en cas d’accident à moto. Robin a le
+          numéro d’assistance 24h/24 sur lui, en version papier et dans son téléphone.
+        </p>
+      </li>
+      <li class="carte-blanche p-4">
+        <p class="font-bold">Tous les vaccins à jour</p>
+        <p class="mt-1 text-encre-douce">
+          Protocole complet validé par un centre de vaccinations internationales en septembre 2026 :
+          rage, encéphalite japonaise, rappel tétanos, hépatite A.
+        </p>
+      </li>
+      <li class="carte-blanche p-4">
+        <p class="font-bold">Un dossier papier en double</p>
+        <p class="mt-1 text-encre-douce">
+          Billets, autorisations d’entrée et numéros utiles sont imprimés sur papier, et une copie
+          reste en France dans la famille.
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="titre-regles" class="mt-7">
+    <h3 id="titre-regles" class="text-xl font-bold">Les règles qu’il s’est fixées</h3>
+    <ul class="mt-3 carte-blanche p-5 space-y-3 list-disc list-inside">
+      <li>Jamais de passage de frontière avec une moto de location.</li>
+      <li>Casque sur la tête en permanence, et aucune conduite de nuit.</li>
+      <li>Trois locations de moto courtes seulement, sur des routes qu’il a repérées à l’avance.</li>
+      <li>Son passeport reste toujours sur lui, jamais laissé en caution chez un loueur.</li>
+      <li>Marche en forêt uniquement accompagné d’un guide local.</li>
+      <li>Eau en bouteille capsulée, et une trousse à pharmacie complète dans son sac.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="titre-joindre" class="mt-7">
+    <h3 id="titre-joindre" class="text-xl font-bold">Comment le joindre</h3>
+    <div class="mt-3 carte-blanche p-5 space-y-3">
+      <p>
+        Le plus simple est <strong>WhatsApp</strong> : les messages, photos et appels passent par
+        Internet, donc sans frais, dès qu’il capte le wifi ou la 4G.
+      </p>
+      <p>
+        Attention au décalage horaire : <strong>il est 5 heures plus tard là-bas</strong> (6 heures à
+        partir du 25 octobre, quand la France passe à l’heure d’hiver). Le matin en France est un bon
+        moment : c’est le début d’après-midi pour lui. Après 19 h en France, il dort.
+      </p>
+      <p class="text-encre-douce">
+        Un message qui reste sans réponse quelques heures, ou quelques jours, est normal : voir
+        ci-dessous.
+      </p>
+    </div>
+  </section>
+
+  <section aria-labelledby="titre-silence" class="mt-7">
+    <h3 id="titre-silence" class="text-xl font-bold">Les périodes sans nouvelles, déjà prévues</h3>
+    <p class="mt-2">
+      Sur plusieurs portions du voyage, il n’y a tout simplement pas de réseau téléphonique. Ces
+      silences sont attendus et ne signifient rien d’anormal.
+    </p>
+    <ul class="mt-3 space-y-2">
+      {
+        silencesPrevus.map((item) => (
+          <li class="carte-blanche p-4">
+            <p class="font-bold">{item.periode}</p>
+            <p class="text-encre-douce">{item.lieu}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="titre-inquietude" class="mt-7">
+    <h3 id="titre-inquietude" class="text-xl font-bold">En cas d’inquiétude</h3>
+    <ol class="mt-3 carte-blanche p-5 space-y-4 list-decimal list-inside">
+      <li>
+        <span class="font-semibold">Regardez cette page.</span> Elle indique l’étape prévue du jour et
+        la date de la dernière nouvelle reçue.
+      </li>
+      <li>
+        <span class="font-semibold">Envoyez un message WhatsApp</span> et attendez la fin de journée
+        locale : il relève ses messages en arrivant à l’étape, le soir.
+      </li>
+      <li>
+        <span class="font-semibold">Après 4 jours de silence complet</span> en dehors des périodes
+        listées ci-dessus, appelez le consulat du pays où il se trouve (numéros ci-dessous).
+      </li>
+      <li>
+        <span class="font-semibold">En cas d’urgence avérée</span>, l’assistance de son assurance
+        intervient 24h/24 : ses coordonnées figurent dans le dossier papier resté en France.
+      </li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="titre-numeros" class="mt-7">
+    <h3 id="titre-numeros" class="text-xl font-bold">Numéros utiles</h3>
+
+    <div class="mt-3 grid gap-3 sm:grid-cols-2">
+      {
+        ambassades.map((item) => (
+          <div class="carte-blanche p-4">
+            <p class="font-semibold">{item.libelle}</p>
+            <a class="mt-1 inline-block text-lg font-bold text-lagon underline" href={`tel:${item.numero.replace(/\s/g, '')}`}>
+              {item.numero}
+            </a>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-3 grid gap-3 sm:grid-cols-2">
+      {
+        urgences.map((item) => (
+          <div class="carte-blanche p-4">
+            <p class="font-semibold">Secours sur place — {item.pays}</p>
+            <ul class="mt-1 text-encre-douce space-y-1">
+              <li>Police : {item.police}</li>
+              <li>Ambulance : {item.ambulance}</li>
+              {item.autre && <li>{item.autre}</li>}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="mt-3 text-sm text-encre-douce">
+      Ces numéros sont publics. Les coordonnées personnelles de Robin et de la famille ne figurent
+      volontairement pas sur cette page, qui est accessible par simple lien.
+    </p>
+  </section>
+
+  <section class="mt-8">
+    <a href={lien('/')} class="bouton bouton-secondaire w-full">Revenir à « En ce moment »</a>
+  </section>
+</Base>

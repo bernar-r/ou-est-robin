@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+import EnTete from '../components/EnTete.astro';
+import PiedDePage from '../components/PiedDePage.astro';
+import { lien } from '../lib/lien';
+
+interface Props {
+  titre: string;
+  description: string;
+  pageActive: 'accueil' | 'voyage' | 'rassurer';
+}
+
+const { titre, description, pageActive } = Astro.props;
+
+// GitHub Pages ne lit pas public/_headers : la politique de sécurité passe donc par cette balise.
+const politiqueSecurite = [
+  "default-src 'self'",
+  "base-uri 'none'",
+  "object-src 'none'",
+  "form-action 'none'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://images.unsplash.com",
+  "connect-src 'self' https://tiles.openfreemap.org",
+  "worker-src 'self' blob:",
+  "child-src 'self' blob:",
+  "font-src 'self'",
+  "manifest-src 'self'",
+].join('; ');
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titre}</title>
+    <meta name="description" content={description} />
+    <!-- Page privée : on demande explicitement aux moteurs de recherche de ne pas l'indexer. -->
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="no-referrer" />
+    <meta http-equiv="Content-Security-Policy" content={politiqueSecurite} />
+    <meta name="theme-color" content="#fbf7f0" />
+    <meta name="color-scheme" content="light" />
+    <link rel="manifest" href={lien('/manifest.webmanifest')} />
+    <link rel="icon" href={lien('/icones/icone.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={lien('/icones/icone-180.png')} />
+    <meta name="apple-mobile-web-app-title" content="Voyage de Robin" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin />
+    <script is:inline>
+      // Appliqué avant le premier rendu pour éviter que le texte ne saute au chargement.
+      try {
+        if (localStorage.getItem('texte-agrandi') === 'oui') {
+          document.documentElement.classList.add('texte-agrandi');
+        }
+      } catch (e) {
+        /* stockage indisponible : on garde la taille par défaut */
+      }
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <a
+      href="#contenu"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:bg-papier focus:px-4 focus:py-3 focus:rounded-xl focus:shadow-douce"
+    >
+      Aller au contenu
+    </a>
+    <EnTete pageActive={pageActive} />
+    <main id="contenu" class="flex-1 w-full max-w-3xl mx-auto px-4 pb-16">
+      <slot />
+    </main>
+    <PiedDePage />
+  </body>
+</html>
+
+<script>
+  const bouton = document.getElementById('bouton-texte');
+
+  bouton?.addEventListener('click', () => {
+    const agrandi = document.documentElement.classList.toggle('texte-agrandi');
+    bouton.setAttribute('aria-pressed', String(agrandi));
+    try {
+      localStorage.setItem('texte-agrandi', agrandi ? 'oui' : 'non');
+    } catch {
+      /* stockage indisponible : le réglage ne sera pas mémorisé */
+    }
+  });
+
+  if (document.documentElement.classList.contains('texte-agrandi')) {
+    bouton?.setAttribute('aria-pressed', 'true');
+  }
+</script>

@@ -1,0 +1,181 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ivoire: #fbf7f0;
+  --color-papier: #ffffff;
+  --color-encre: #1c1917;
+  --color-encre-douce: #57534e;
+  --color-bordure: #e6ded0;
+
+  --color-or: #b45309;
+  --color-or-pale: #fdf1dc;
+  --color-jade: #047857;
+  --color-jade-pale: #dcf5ea;
+  --color-lagon: #0e7490;
+  --color-lagon-pale: #ddf3f8;
+  --color-alerte: #b42318;
+  --color-alerte-pale: #fdeceb;
+
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --radius-carte: 1.25rem;
+
+  --shadow-douce: 0 1px 2px rgb(28 25 23 / 0.06), 0 8px 24px -12px rgb(28 25 23 / 0.18);
+  --shadow-relief: 0 2px 4px rgb(28 25 23 / 0.06), 0 18px 40px -20px rgb(28 25 23 / 0.28);
+}
+
+@layer base {
+  /* Texte de base à 18 px : confort de lecture prioritaire sur la densité. */
+  html {
+    font-size: 112.5%;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html.texte-agrandi {
+    font-size: 131.25%;
+  }
+
+  body {
+    background-color: var(--color-ivoire);
+    color: var(--color-encre);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    line-height: 1.15;
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :where(a, button, summary, [tabindex]):focus-visible {
+    outline: 3px solid var(--color-lagon);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  summary {
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  img {
+    background-color: var(--color-or-pale);
+  }
+}
+
+@layer components {
+  .carte-blanche {
+    background-color: var(--color-papier);
+    border: 1px solid var(--color-bordure);
+    border-radius: var(--radius-carte);
+    box-shadow: var(--shadow-douce);
+  }
+
+  /* Cible tactile confortable : 48 px minimum, y compris pour les seniors. */
+  .bouton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .bouton-principal {
+    background-color: var(--color-encre);
+    color: var(--color-papier);
+  }
+
+  .bouton-principal:hover {
+    background-color: #000000;
+  }
+
+  .bouton-secondaire {
+    background-color: var(--color-papier);
+    color: var(--color-encre);
+    border: 1px solid var(--color-bordure);
+  }
+
+  .bouton-secondaire:hover {
+    background-color: var(--color-or-pale);
+  }
+}
+
+/* Carte interactive */
+.maplibregl-popup-content {
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-relief);
+}
+
+.maplibregl-ctrl-group button {
+  width: 40px;
+  height: 40px;
+}
+
+.marqueur-etape {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 3px solid #ffffff;
+  background-color: var(--color-encre-douce);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.35);
+  cursor: pointer;
+}
+
+.marqueur-etape.est-passee {
+  background-color: var(--color-or);
+}
+
+.marqueur-etape.est-aujourdhui {
+  width: 30px;
+  height: 30px;
+  border-width: 4px;
+  background-color: var(--color-alerte);
+  animation: pulsation 2.2s ease-out infinite;
+}
+
+@keyframes pulsation {
+  0% {
+    box-shadow: 0 0 0 0 rgb(180 35 24 / 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 22px rgb(180 35 24 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(180 35 24 / 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

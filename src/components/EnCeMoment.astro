@@ -1,0 +1,132 @@
+---
+import { TRANSPORTS } from '../data/schema';
+import { ITINERAIRE } from '../data/itineraire';
+import {
+  accorderJours,
+  dateEnFrancais,
+  decalageAvecLaFrance,
+  FUSEAU_VOYAGE,
+  heureEnZone,
+  situationAu,
+} from '../lib/voyage';
+import { STATUT } from '../data/statut';
+
+const maintenant = new Date();
+const situation = situationAu(maintenant);
+const jour = situation.jour;
+const premier = ITINERAIRE[0]!;
+
+const villeAffichee =
+  situation.etat === 'pendant' ? STATUT.villeReelle ?? jour!.ville : situation.etat === 'avant' ? 'à la maison' : 'rentré';
+
+const titre =
+  situation.etat === 'pendant'
+    ? `Robin est à ${villeAffichee}`
+    : situation.etat === 'avant'
+      ? `Robin part dans ${accorderJours(situation.joursAvantDepart)}`
+      : 'Robin est bien rentré';
+
+const surtitre =
+  situation.etat === 'pendant'
+    ? `Aujourd’hui, ${dateEnFrancais(situation.dateISO)}`
+    : situation.etat === 'avant'
+      ? `Départ le ${dateEnFrancais(premier.dateISO)}`
+      : 'Voyage terminé';
+
+const resume =
+  situation.etat === 'pendant'
+    ? jour!.resumeFamille
+    : situation.etat === 'avant'
+      ? 'Le voyage n’a pas encore commencé. Vous pouvez déjà parcourir le trajet prévu et les étapes, jour par jour.'
+      : 'Le voyage est terminé et Robin a atterri à Genève. Vous pouvez revoir toutes les étapes du parcours.';
+
+const transport = jour ? TRANSPORTS[jour.transport] : TRANSPORTS.surplace;
+const decalage = decalageAvecLaFrance(maintenant);
+const photo = jour?.photo ?? premier.photo;
+---
+
+<section aria-labelledby="titre-en-ce-moment" class="mt-6">
+  <div class="carte-blanche overflow-hidden">
+    <img
+      id="photo-jour"
+      src={photo}
+      alt=""
+      width="1000"
+      height="563"
+      class="w-full aspect-[16/9] object-cover"
+      fetchpriority="high"
+      decoding="async"
+      referrerpolicy="no-referrer"
+    />
+
+    <div class="p-5 sm:p-7">
+      <p
+        id="statut-pastille"
+        class="inline-flex items-center gap-2 rounded-full bg-jade-pale px-3 py-1.5 text-sm font-semibold text-jade"
+      >
+        <span aria-hidden="true">●</span>
+        <span id="statut-texte">{STATUT.toutVaBien ? 'Tout va bien' : 'Situation à surveiller'}</span>
+      </p>
+
+      <p id="surtitre" class="mt-4 text-base font-semibold text-encre-douce">{surtitre}</p>
+
+      <h2 id="titre-en-ce-moment" class="mt-1 text-3xl sm:text-4xl font-bold">
+        <span id="titre-texte">{titre}</span>
+        {jour && <span id="titre-drapeau" aria-hidden="true"> {jour.drapeau}</span>}
+      </h2>
+
+      <p id="resume-jour" class="mt-4 text-lg leading-relaxed">{resume}</p>
+
+      <div class="mt-6">
+        <div class="flex items-baseline justify-between gap-3">
+          <p id="compteur-jour" class="font-semibold">
+            {situation.etat === 'pendant' ? `Jour ${situation.numeroAffiche} sur ${situation.totalJours}` : 'Voyage de 25 jours'}
+          </p>
+          <p id="compte-a-rebours" class="text-sm text-encre-douce">
+            {
+              situation.etat === 'pendant'
+                ? `Retour dans ${accorderJours(situation.joursAvantRetour)}`
+                : situation.etat === 'avant'
+                  ? `Départ dans ${accorderJours(situation.joursAvantDepart)}`
+                  : 'Arrivé à Genève le 30 octobre'
+            }
+          </p>
+        </div>
+        <div
+          id="barre-progression"
+          role="progressbar"
+          aria-labelledby="compteur-jour"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow={situation.progressionPourcent}
+          class="mt-2 h-3 w-full rounded-full bg-or-pale overflow-hidden"
+        >
+          <div id="barre-remplissage" class="h-full rounded-full bg-or" style={`width:${situation.progressionPourcent}%`}></div>
+        </div>
+      </div>
+
+      <dl class="mt-6 grid gap-3 sm:grid-cols-3">
+        <div class="rounded-xl bg-ivoire border border-bordure p-4">
+          <dt class="text-sm font-semibold text-encre-douce">Heure là-bas</dt>
+          <dd class="mt-1 text-xl font-bold">
+            <span id="info-heure">{heureEnZone(maintenant, FUSEAU_VOYAGE)}</span>
+          </dd>
+          <p id="info-decalage" class="text-sm text-encre-douce">
+            {decalage > 0 ? `${decalage} h de plus qu’en France` : 'Même heure qu’en France'}
+          </p>
+        </div>
+        <div class="rounded-xl bg-ivoire border border-bordure p-4">
+          <dt class="text-sm font-semibold text-encre-douce">Aujourd’hui il se déplace</dt>
+          <dd class="mt-1 text-xl font-bold">
+            <span id="info-transport-emoji" aria-hidden="true">{transport.emoji}</span>
+            <span id="info-transport">{transport.label}</span>
+          </dd>
+        </div>
+        <div class="rounded-xl bg-ivoire border border-bordure p-4">
+          <dt class="text-sm font-semibold text-encre-douce">Il dort</dt>
+          <dd id="info-dort" class="mt-1 text-base font-semibold">{jour?.dortA ?? 'À la maison'}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>

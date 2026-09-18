@@ -1,0 +1,91 @@
+---
+import { ITINERAIRE } from '../data/itineraire';
+import { situationAu } from '../lib/voyage';
+import { lien } from '../lib/lien';
+
+const situation = situationAu();
+const villeInitiale = situation.jour?.ville ?? ITINERAIRE[0]!.ville;
+---
+
+<section aria-labelledby="titre-carte" class="mt-6">
+  <h2 id="titre-carte" class="text-xl font-bold mb-3">Le trajet</h2>
+
+  <div class="carte-blanche overflow-hidden">
+    <div
+      id="carte"
+      data-ville-initiale={villeInitiale}
+      class="relative h-[22rem] sm:h-[26rem] w-full bg-or-pale"
+      role="group"
+      aria-label="Carte du trajet de Robin en Thaïlande et au Laos"
+    >
+      <div
+        id="carte-repli"
+        class="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center"
+      >
+        <p class="text-encre-douce">Chargement de la carte…</p>
+        <p class="text-sm text-encre-douce">
+          Si elle ne s’affiche pas, la liste complète des étapes reste disponible sur la page
+          <a class="underline font-semibold" href={lien('/voyage')}>Le voyage</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="border-t border-bordure px-4 py-3 text-sm text-encre-douce">
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        <li class="flex items-center gap-2">
+          <span aria-hidden="true" class="inline-block w-6 h-1 rounded-full bg-or"></span>
+          Trajet déjà parcouru
+        </li>
+        <li class="flex items-center gap-2">
+          <span
+            aria-hidden="true"
+            class="inline-block w-6 h-1 rounded-full border-t-2 border-dashed border-encre-douce"
+          ></span>
+          Trajet à venir
+        </li>
+        <li class="flex items-center gap-2">
+          <span aria-hidden="true" class="inline-block w-3 h-3 rounded-full bg-alerte"></span>
+          Étape du jour
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { lien } from '../lib/lien';
+
+  const conteneur = document.getElementById('carte');
+  const repli = document.getElementById('carte-repli');
+
+  function echec(message: string) {
+    if (!repli) return;
+    repli.innerHTML = '';
+    const p = document.createElement('p');
+    p.className = 'text-encre-douce';
+    p.textContent = message;
+    const a = document.createElement('a');
+    a.href = lien('/voyage');
+    a.className = 'bouton bouton-secondaire mt-3';
+    a.textContent = 'Voir les étapes sous forme de liste';
+    repli.append(p, a);
+  }
+
+  if (conteneur) {
+    // Chargement différé : la bibliothèque cartographique (volumineuse) n'est
+    // téléchargée que lorsque la carte entre réellement dans l'écran.
+    const observateur = new IntersectionObserver(
+      (entrees) => {
+        if (!entrees.some((e) => e.isIntersecting)) return;
+        observateur.disconnect();
+
+        import('../scripts/carte-init')
+          .then(({ demarrerCarte }) => demarrerCarte(conteneur, repli))
+          .catch(() => echec('La carte n’a pas pu être chargée.'));
+      },
+      { rootMargin: '250px' },
+    );
+
+    observateur.observe(conteneur);
+  }
+</script>

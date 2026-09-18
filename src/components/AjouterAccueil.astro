@@ -1,0 +1,43 @@
+---
+const etapes = {
+  iphone: [
+    'Ouvrez cette page dans Safari.',
+    'Appuyez sur le bouton Partager, en bas de l’écran (le carré avec une flèche vers le haut).',
+    'Faites défiler, appuyez sur « Sur l’écran d’accueil », puis sur « Ajouter ».',
+  ],
+  android: [
+    'Ouvrez cette page dans Chrome.',
+    'Appuyez sur les trois petits points, en haut à droite.',
+    'Appuyez sur « Ajouter à l’écran d’accueil », puis sur « Ajouter ».',
+  ],
+};
+---
+
+<section aria-labelledby="titre-accueil" class="mt-8">
+  <details class="carte-blanche p-5 sm:p-6">
+    <summary id="titre-accueil" class="text-lg font-bold list-none flex items-center justify-between gap-3">
+      <span>Garder cette page à portée de main</span>
+      <span aria-hidden="true" class="text-or">＋</span>
+    </summary>
+
+    <p class="mt-4">
+      En trois gestes, vous pouvez poser cette page sur l’écran d’accueil de votre téléphone, comme
+      une application. Vous n’aurez plus besoin de retrouver le lien.
+    </p>
+
+    <div class="mt-5 grid gap-5 sm:grid-cols-2">
+      <div>
+        <h3 class="font-bold">Sur iPhone</h3>
+        <ol class="mt-2 space-y-2 list-decimal list-inside text-encre-douce">
+          {etapes.iphone.map((etape) => <li>{etape}</li>)}
+        </ol>
+      </div>
+      <div>
+        <h3 class="font-bold">Sur Android</h3>
+        <ol class="mt-2 space-y-2 list-decimal list-inside text-encre-douce">
+          {etapes.android.map((etape) => <li>{etape}</li>)}
+        </ol>
+      </div>
+    </div>
+  </details>
+</section>
