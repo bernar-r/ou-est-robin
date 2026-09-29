@@ -2,13 +2,14 @@
 import { lien } from '../lib/lien';
 
 interface Props {
-  pageActive: 'accueil' | 'voyage' | 'rassurer';
+  pageActive: 'accueil' | 'voyage' | 'rassurer' | 'carte';
 }
 
 const { pageActive } = Astro.props;
 
 const liens = [
   { cle: 'accueil', href: lien('/'), libelle: 'En ce moment' },
+  { cle: 'carte', href: lien('/#carte'), libelle: 'La carte' },
   { cle: 'voyage', href: lien('/voyage'), libelle: 'Le voyage' },
   { cle: 'rassurer', href: lien('/rassurer'), libelle: 'Bon à savoir' },
 ] as const;
