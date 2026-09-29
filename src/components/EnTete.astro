@@ -9,7 +9,7 @@ const { pageActive } = Astro.props;
 
 const liens = [
   { cle: 'accueil', href: lien('/'), libelle: 'En ce moment' },
-  { cle: 'carte', href: lien('/#carte'), libelle: 'La carte' },
+  { cle: 'carte', href: 'https://bernar-r.github.io/carte-voyage-thailande-laos/', libelle: 'Carte 3D ↗', target: '_blank', rel: 'noopener noreferrer' },
   { cle: 'voyage', href: lien('/voyage'), libelle: 'Le voyage' },
   { cle: 'rassurer', href: lien('/rassurer'), libelle: 'Bon à savoir' },
 ] as const;
@@ -41,6 +41,8 @@ const liens = [
             <li>
               <a
                 href={lien.href}
+                target={'target' in lien ? lien.target : undefined}
+                rel={'rel' in lien ? lien.rel : undefined}
                 aria-current={pageActive === lien.cle ? 'page' : undefined}
                 class:list={[
                   'bouton whitespace-nowrap text-base',
