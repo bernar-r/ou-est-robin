@@ -193,10 +193,10 @@ const jours: Jour[] = [
     pays: 'Laos',
     drapeau: '🇱🇦',
     coordonnees: [102.1396, 19.8893],
-    titreSimple: 'Journée de repos',
+    titreSimple: 'Aumône des moines, massage et bord du Mékong',
     resumeFamille:
-      'Une journée volontairement vide, sans réveil ni programme : grasse matinée, café, massage et lecture au bord de la rivière. C’est prévu ainsi pour éviter la fatigue.',
-    tempsFort: 'Ne rien faire, tranquillement',
+      'Au lever du jour, moment paisible pour assister discrètement à l’aumône traditionnelle des moines (Tak Bat) dans les ruelles calmes. Café face au fleuve, deux heures de massage traditionnel laotien et sauna aux plantes, puis après-midi détente au bord du Mékong.',
+    tempsFort: 'L’aumône matinale des moines et le massage traditionnel',
     dortA: 'Maison d’hôtes dans la vieille ville',
     transport: 'surplace',
     photo: 'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?auto=format&fit=crop&w=1000&q=70',
